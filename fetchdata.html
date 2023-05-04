@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL firebase data</title>
+</head>
+
+<body>
+    <div>
+        <table>
+            <thead>
+                <th>Location</th>
+                <th>Pickup_date</th>
+                <th>Return_date</th>
+            </thead>
+            <tbody id="tbody1"></tbody><!-- will carry all record-->
+        </table>
+    </div>
+    <script type="module">
+        var tbody=document.getElementById('tbody1');
+        function ADDItemToTable(location, Pickup_date, Return_date){
+          console.log(location);
+          let trow=document.createElement("tr"); 
+          let td1=document.createElement("td");
+          let td2=document.createElement("td"); 
+          let td3=document.createElement("td");  
+
+          td1.innerHTML =location;
+          td2.innerHTML =Pickup_date;
+          td3.innerHTML =Return_date;
+
+          trow.appendChild(td1);
+          trow.appendChild(td2);
+          trow.appendChild(td3);
+
+          tbody.appendChild(trow);
+       }
+       
+       function AddAllItemsToTable(data1){
+        console.log(data1);
+        tbody.innerHTML="";
+        data1.forEach(element => {
+            ADDItemToTable(element.location, element.pickup, element.ret);
+        });
+     }
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
+     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-analytics.js"; 
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+      apiKey: "AIzaSyAdGZRJpb-cVwjaT_6TqgjxsCsJiDgvJG4",
+      authDomain: "spotify-59082.firebaseapp.com",
+      databaseURL: "https://spotify-59082-default-rtdb.firebaseio.com",
+      projectId: "spotify-59082",
+      storageBucket: "spotify-59082.appspot.com",
+      messagingSenderId: "1027572559240",
+      appId: "1:1027572559240:web:667426e5ecd1ae1b181e3d",
+      measurementId: "G-31EGXS5TD6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  import  { getDatabase, ref, child, onValue, get }
+   from "https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js";
+  const db=getDatabase();
+
+     function GetAllDataOnce(){
+        const dbRef =ref(db);
+        get(child(dbRef, "details/-NUSjgt869RetnSJj8tx"))
+        .then(
+            (snapshot)=>{
+            var data2=[];
+
+            snapshot.forEach(childSnapshot => {
+                data2.push(snapshot.val());
+        });
+        console.log(data2); 
+        AddAllItemsToTable(data2);
+        console.log(data2); 
+     })
+    } 
+    window.onload =GetAllDataOnce;
+
+
+
+       
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
